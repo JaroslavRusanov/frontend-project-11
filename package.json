@@ -28,6 +28,8 @@
   },
   "keywords": [],
   "dependencies": {
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.3",
+    "on-change": "^5.0.1",
+    "yup": "^1.4.0"
   }
 }
