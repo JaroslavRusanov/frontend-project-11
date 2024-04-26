@@ -29,6 +29,7 @@
   "keywords": [],
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "i18next": "^23.11.2",
     "on-change": "^5.0.1",
     "yup": "^1.4.0"
   }
