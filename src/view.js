@@ -1,13 +1,7 @@
 import onChange from 'on-change';
 
 export default (elements, i18n, state) => {
-  const { form,
-    input,
-    errorMessage,
-    buttonSubmit,
-    rssPosts,
-    rssFeeds,
-  } = elements;
+  const { form, input, errorMessage, buttonSubmit, rssPosts, rssFeeds } = elements;
 
   const watchedState = onChange(state, (path, value) => {
     const { t } = i18n;
@@ -32,7 +26,9 @@ export default (elements, i18n, state) => {
           } else if (value === 'pending') {
             buttonSubmit.disabled = false;
             input.classList.remove('is-invalid');
-        }
+          } else if (value === 'changed') {
+            renderRSS();
+          }
       }
   });
 
@@ -49,7 +45,7 @@ export default (elements, i18n, state) => {
       elLiFeed.innerHTML = `<h3 class="h6 m-0">${title}</h3><p class="m-0 small text-black-50">${description}</p>`;
       feedsUl.append(elLiFeed);
     });
-
+      
     state.rss.posts.forEach(({ title, link, id }) => {
       const elLiPost = document.createElement('li');
       elLiPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
@@ -57,7 +53,6 @@ export default (elements, i18n, state) => {
       <button type="button" class="btn btn-outline-primary btn-sm" data-id="${id}" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
       postsUl.append(elLiPost);
     });
-
   }
 
   return {
