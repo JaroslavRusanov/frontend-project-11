@@ -1,6 +1,3 @@
-import { uniqueId } from "lodash";
-
-
 
 export default (response) => {
   const parser = new DOMParser()
@@ -11,18 +8,15 @@ export default (response) => {
     return false;
   }
 
-  const feedID = uniqueId();
   const feed = {
-    id: feedID,
     title: documentRSS.querySelector('description').textContent,
     description: documentRSS.querySelector('description').textContent,
-  };
+    
+    };
 
   const items = documentRSS.querySelectorAll('item');
   const posts = [...items].map((item) => {
     const post = {
-      id: uniqueId(),
-      feedID,
       title: item.querySelector('title').textContent,
       description: item.querySelector('description').textContent,
       link: item.querySelector('link').textContent,
