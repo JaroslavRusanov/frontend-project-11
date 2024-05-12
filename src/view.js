@@ -4,8 +4,8 @@ export default (elements, i18n, state) => {
   const { form, input, errorMessage, buttonSubmit, rssPosts, rssFeeds, modal } = elements;
 
   const renderRSS = () => {
-    rssFeeds.innerHTML = '<div class="card-body"><h2 class="card-title h4">Фиды</h2></div><ul class="list-group border-0 rounded-0"></ul></div>';
-    rssPosts.innerHTML = '<div class="card-body"><h2 class="card-title h4">Посты</h2></div><ul class="list-group border-0 rounded-0"></ul></div>';
+    rssFeeds.innerHTML = '<div class="card border-0"><div class="card-body"><h2 class="card-title h4">Фиды</h2></div><ul class="list-group border-0 rounded-0"></ul></div></div>';
+    rssPosts.innerHTML = '<div class="card border-0"><div class="card-body"><h2 class="card-title h4">Посты</h2></div><ul class="list-group border-0 rounded-0"></ul></div></div>';
 
     const feedsUl = rssFeeds.querySelector('ul');
     const postsUl = rssPosts.querySelector('ul');

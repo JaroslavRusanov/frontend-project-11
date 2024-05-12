@@ -62,7 +62,6 @@ const app = () => {
           .then((response) => {
             const { latestPost } = parse(response);
             const statePosts = state.rss.posts;
-            console.log('check')
             if (isNewTitle(statePosts, latestPost.title)) {
               latestPost.id = uniqueId();
               watchedState.rss.posts = [latestPost, ...state.rss.posts];

@@ -9,9 +9,8 @@ export default (response) => {
   }
 
   const feed = {
-    title: documentRSS.querySelector('description').textContent,
+    title: documentRSS.querySelector('title').textContent,
     description: documentRSS.querySelector('description').textContent,
-    
     };
 
   const items = documentRSS.querySelectorAll('item');
