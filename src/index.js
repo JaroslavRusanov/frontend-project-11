@@ -1,12 +1,12 @@
 import './styles.scss';
 import 'bootstrap';
 import { uniqueId } from 'lodash';
-import watch from './view.js';
 import { object, string } from 'yup';
-import resources from './locales/index.js';
 import i18next from 'i18next';
 import axios from 'axios';
+import resources from './locales/index.js';
 import parse from './parse.js';
+import watch from './view.js';
 
 const app = () => {
   const elements = {
@@ -55,7 +55,8 @@ const app = () => {
     };
 
     setTimeout(() => {
-      state.rssUrl.urls.forEach((url) => {axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
+      state.rssUrl.urls.forEach((url) => {
+        axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
           .then((response) => {
             const { latestPost } = parse(response);
             const statePosts = state.rss.posts;
@@ -76,13 +77,16 @@ const app = () => {
     }, 5000);
   };
 
-  const requestRSS = (url) => {axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
+  const requestRSS = (url) => {
+    axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
       .then((response) => {
         const parsedData = parse(response);
         if (!parsedData) {
           watchedState.rssUrl.error = 'errorRSS';
         } else {
-          parsedData.posts.forEach((post) => post.id = uniqueId());
+          parsedData.posts.forEach((post) => {
+            post.id = uniqueId();
+          });
           watchedState.rss.feeds = [...state.rss.feeds, parsedData.feed];
           watchedState.rss.posts = [...parsedData.posts, ...state.rss.posts];
           watchedState.rssUrl.urls = [...state.rssUrl.urls, url];
@@ -106,7 +110,9 @@ const app = () => {
         watchedState.rssUrl.state = 'requesting';
         requestRSS(item.url);
       })
-      .catch((err) => watchedState.rssUrl.error = err.type)
+      .catch((err) => {
+        watchedState.rssUrl.error = err.type;
+      });
   };
 
   elements.form.addEventListener('submit', (e) => {
@@ -115,7 +121,9 @@ const app = () => {
     getRSS(Object.fromEntries(formData));
   });
 
-  elements.input.addEventListener('input', () => watchedState.rssUrl.state = 'pending');
+  elements.input.addEventListener('input', () => {
+    watchedState.rssUrl.state = 'pending';
+  });
 
   elements.rssPosts.addEventListener('click', (e) => {
     const typeElement = e.target.dataset.type;
