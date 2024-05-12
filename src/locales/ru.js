@@ -1,4 +1,3 @@
-
 export default {
   translation: {
     url: 'Ссылка должна быть валидным URL',
@@ -6,5 +5,5 @@ export default {
     netError: 'Ошибка сети',
     errorRSS: 'Ресурс не содержит валидный RSS',
     successRSS: 'RSS успешно загружен',
-  }
+  },
 };

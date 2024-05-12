@@ -1,14 +1,12 @@
 import './styles.scss';
 import 'bootstrap';
-import watch from './view.js'
+import { uniqueId } from 'lodash';
+import watch from './view.js';
 import { object, string } from 'yup';
 import resources from './locales/index.js';
 import i18next from 'i18next';
 import axios from 'axios';
 import parse from './parse.js';
-import { uniqueId } from "lodash";
-
-
 
 const app = () => {
   const elements = {
@@ -40,7 +38,7 @@ const app = () => {
     },
     ui: {
       checkedPosts: [],
-    }
+    },
   };
 
   const { watchedState } = watch(elements, i18n, state);
@@ -52,13 +50,12 @@ const app = () => {
         if (title === latestTitle) {
           result = false;
         }
-      })
+      });
       return result;
     };
 
     setTimeout(() => {
-      state.rssUrl.urls.forEach((url) => {
-        return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
+      state.rssUrl.urls.forEach((url) => {axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
           .then((response) => {
             const { latestPost } = parse(response);
             const statePosts = state.rss.posts;
@@ -67,7 +64,7 @@ const app = () => {
               watchedState.rss.posts = [latestPost, ...state.rss.posts];
               watchedState.rssUrl.state = 'changed';
             }
-            watchedState.rssUrl.state ='pending';
+            watchedState.rssUrl.state = 'pending';
           })
           .catch((err) => {
             if (err) {
@@ -79,14 +76,13 @@ const app = () => {
     }, 5000);
   };
 
-  const requestRSS = (url) => {
-    return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
+  const requestRSS = (url) => {axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
       .then((response) => {
         const parsedData = parse(response);
         if (!parsedData) {
-          watchedState.rssUrl.error = 'errorRSS'
+          watchedState.rssUrl.error = 'errorRSS';
         } else {
-          parsedData.posts.forEach((post) => post.id = uniqueId())
+          parsedData.posts.forEach((post) => post.id = uniqueId());
           watchedState.rss.feeds = [...state.rss.feeds, parsedData.feed];
           watchedState.rss.posts = [...parsedData.posts, ...state.rss.posts];
           watchedState.rssUrl.urls = [...state.rssUrl.urls, url];
@@ -109,7 +105,7 @@ const app = () => {
       .then((item) => {
         watchedState.rssUrl.state = 'requesting';
         requestRSS(item.url);
-        })
+      })
       .catch((err) => watchedState.rssUrl.error = err.type)
   };
 
@@ -119,7 +115,7 @@ const app = () => {
     getRSS(Object.fromEntries(formData));
   });
 
-  elements.input.addEventListener('input', () => watchedState.rssUrl.state ='pending');
+  elements.input.addEventListener('input', () => watchedState.rssUrl.state = 'pending');
 
   elements.rssPosts.addEventListener('click', (e) => {
     const typeElement = e.target.dataset.type;
