@@ -8,7 +8,7 @@ export default (elements, i18n, state) => {
     buttonSubmit,
     rssPosts,
     rssFeeds,
-    modal 
+    modal,
   } = elements;
 
   const renderRSS = () => {
