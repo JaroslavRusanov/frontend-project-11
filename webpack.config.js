@@ -1,30 +1,7 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-
-const isProduction = process.env.NODE_ENV === 'production';
-
-const config = {
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
-  },
-  devServer: {
-    open: true,
-    host: 'localhost',
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: 'template.html',
-      filename: 'index.html',
-    }),
-
-    // Add your plugins here
-    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
-  ],
+export default {
+  mode: process.env.NODE_ENV || 'development',
   module: {
     rules: [
       {
@@ -36,10 +13,6 @@ const config = {
             presets: ['@babel/preset-env'],
           },
         },
-      },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
       },
       { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
       {
@@ -54,19 +27,14 @@ const config = {
         test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
         use: 'file-loader',
       },
-
-      // Add your rules for custom modules here
-      // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
-};
-
-module.exports = () => {
-  if (isProduction) {
-    config.mode = 'production';
-    config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
-  } else {
-    config.mode = 'development';
-  }
-  return config;
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'template.html',
+    }),
+  ],
+  output: {
+    clean: true,
+  },
 };
