@@ -10,6 +10,7 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
   },
   devServer: {
     open: true,
