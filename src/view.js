@@ -6,34 +6,73 @@ export default (elements, i18n, state) => {
     input,
     errorMessage,
     buttonSubmit,
-    rssPosts,
-    rssFeeds,
     modal,
+    rssPosts,
   } = elements;
 
   const renderRSS = () => {
-    rssFeeds.innerHTML = '<div class="card border-0"><div class="card-body"><h2 class="card-title h4">Фиды</h2></div><ul class="list-group border-0 rounded-0"></ul></div></div>';
-    rssPosts.innerHTML = '<div class="card border-0"><div class="card-body"><h2 class="card-title h4">Посты</h2></div><ul class="list-group border-0 rounded-0"></ul></div></div>';
+    const rssFeeds = document.querySelector('.feeds');
+    const titleFeeds = rssFeeds.querySelector('h2');
+    titleFeeds.textContent = 'Фиды';
+    const ulFeeds = rssFeeds.querySelector('ul');
+    const newUlFeeds = document.createElement('ul');
+    newUlFeeds.classList.add('list-group', 'border-0', 'rounded-0');
 
-    const feedsUl = rssFeeds.querySelector('ul');
-    const postsUl = rssPosts.querySelector('ul');
+    const titlePosts = rssPosts.querySelector('h2');
+    titlePosts.textContent = 'Посты';
+    const ulPosts = rssPosts.querySelector('ul');
+    const newUlPosts = document.createElement('ul');
+    newUlPosts.classList.add('list-group', 'border-0', 'rounded-0');
 
     state.rss.feeds.forEach(({ title, description }) => {
       const elLiFeed = document.createElement('li');
       elLiFeed.classList.add('list-group-item', 'border-0', 'border-end-0');
-      elLiFeed.innerHTML = `<h3 class="h6 m-0">${title}</h3><p class="m-0 small text-black-50">${description}</p>`;
-      feedsUl.append(elLiFeed);
+
+      const titlePost = document.createElement('h3');
+      titlePost.classList.add('h6', 'm-0');
+      titlePost.textContent = title;
+
+      const descriptionPost = document.createElement('p');
+      descriptionPost.classList.add('m-0', 'small', 'text-black-50');
+      descriptionPost.textContent = description;
+
+      elLiFeed.append(titlePost, descriptionPost);
+      newUlFeeds.append(elLiFeed);
     });
 
     state.rss.posts.forEach(({ title, link, id }) => {
       const elLiPost = document.createElement('li');
       elLiPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+
       const checkId = state.ui.checkedPosts.find((item) => item === id);
-      const classElLi = !checkId ? 'fw-bold' : 'fw-normal, link-secondary';
-      elLiPost.innerHTML = `<a href="${link}" class="${classElLi}" data-id="${id}" target="_blank" rel="noopener noreferrer" data-type="link">${title}</a>
-      <button type="button" class="btn btn-outline-primary btn-sm" data-id="${id}" data-bs-toggle="modal" data-bs-target="#modal" data-type="modal">Просмотр</button>`;
-      postsUl.append(elLiPost);
+
+      const linkPost = document.createElement('a');
+      linkPost.classList.add('fw-normal', 'link-secondary');
+      if (!checkId) {
+        linkPost.classList.remove('fw-normal', 'link-secondary');
+        linkPost.classList.add('fw-bold');
+      }
+      linkPost.setAttribute('href', `${link}`);
+      linkPost.setAttribute('data-id', `${id}`);
+      linkPost.setAttribute('target', '_blank');
+      linkPost.setAttribute('rel', 'noopener noreferrer');
+      linkPost.setAttribute('data-type', 'link');
+      linkPost.textContent = title;
+
+      const buttonPost = document.createElement('button');
+      buttonPost.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+      buttonPost.setAttribute('type', 'button');
+      buttonPost.setAttribute('data-id', `${id}`);
+      buttonPost.setAttribute('data-bs-toggle', 'modal');
+      buttonPost.setAttribute('data-bs-target', '#modal');
+      buttonPost.setAttribute('data-type', 'modal');
+      buttonPost.textContent = 'Просмотр';
+
+      elLiPost.append(linkPost, buttonPost);
+      newUlPosts.append(elLiPost);
     });
+    ulFeeds.replaceWith(newUlFeeds);
+    ulPosts.replaceWith(newUlPosts);
   };
 
   const renderUI = (dataID) => {
@@ -44,8 +83,8 @@ export default (elements, i18n, state) => {
     const titleModal = modal.querySelector('h5');
     titleModal.textContent = currentPost.title;
 
-    const titleDescription = modal.querySelector('.modal-body');
-    titleDescription.textContent = currentPost.description;
+    const descriptionModal = modal.querySelector('.modal-body');
+    descriptionModal.textContent = currentPost.description;
 
     const linkModal = modal.querySelector('a');
     linkModal.setAttribute('href', currentPost.link);
