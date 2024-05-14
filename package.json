@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "training project RSS Agrigator",
+  "description": "training web project RSS Agrigator",
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,11 @@
   "author": "Iaroslav Rusanov sco.nuff@gmail.com",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-env": "^7.20.2",
     "@webpack-cli/generators": "^3.0.7",
+    "babel-loader": "^9.1.3",
     "css-loader": "^7.1.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
