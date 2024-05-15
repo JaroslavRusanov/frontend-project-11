@@ -93,41 +93,57 @@ export default (elements, i18n, state) => {
     currentElement.classList.add('fw-normal', 'link-secondary');
   };
 
-  const watchedState = onChange(state, (path, value) => {
-    const { t } = i18n;
-    if (path === 'rssUrl.error') {
-      errorMessage.textContent = t(value);
+  const loadProcess = (data) => {
+    switch (data) {
+      case 'requesting':
+        buttonSubmit.disabled = true;
+        errorMessage.textContent = '';
+        break;
+      case 'processed':
+        renderRSS();
+        break;
+      case 'pending':
+        buttonSubmit.disabled = false;
+        break;
+      default:
+        throw new Error('unknown process status');
+    }
+  };
+
+  const { t } = i18n;
+
+  const changingForm = (data) => {
+    const { error, valid } = data;
+    if (valid) {
+      console.log(`2${data}`);
+      errorMessage.textContent = t('successRSS');
+      errorMessage.classList.remove('text-danger');
+      errorMessage.classList.add('text-success');
+      input.classList.remove('is-invalid');
+      buttonSubmit.disabled = false;
+      form.reset();
+      input.focus();
+    } else {
+      errorMessage.textContent = t(error);
       input.classList.add('is-invalid');
       errorMessage.classList.add('text-danger');
       input.focus();
-    } else if (path === 'rssUrl.state') {
-      switch (value) {
-        case 'requesting':
-          errorMessage.textContent = '';
-          buttonSubmit.disabled = true;
-          break;
-        case 'processed':
-          errorMessage.textContent = t('successRSS');
-          errorMessage.classList.remove('text-danger');
-          errorMessage.classList.add('text-success');
-          input.classList.remove('is-invalid');
-          buttonSubmit.disabled = false;
-          form.reset();
-          input.focus();
-          renderRSS();
-          break;
-        case 'pending':
-          buttonSubmit.disabled = false;
-          input.classList.remove('is-invalid');
-          break;
-        case 'changed':
-          renderRSS();
-          break;
-        default:
-          throw new Error('unknown state');
-      }
-    } else if (path === 'ui.checkedPosts') {
-      renderUI(value);
+    }
+  };
+
+  const watchedState = onChange(state, (path, value) => {
+    switch (path) {
+      case 'form':
+        changingForm(value);
+        break;
+      case 'rssUrl.state':
+        loadProcess(value);
+        break;
+      case 'ui.checkedPosts':
+        renderUI(value);
+        break;
+      default:
+        throw new Error('unknown state status');
     }
   });
 
